@@ -1,42 +1,48 @@
-import { toast } from "react-hot-toast";
-import { FcDeleteDatabase } from "react-icons/fc";
-import { useDispatch } from "react-redux";
-import { remove } from "../redux/Slices/CartSlice";
 
-const CartItem = ({item, itemIndex}) => {
-  const dispatch = useDispatch();
-
-  const removeFromCart = () => {
-    dispatch(remove(item.id));
-    toast.success("Item removed to Cart");
+import React from 'react'
+import toast from 'react-hot-toast';
+import { MdAutoDelete } from "react-icons/md";
+import { useDispatch, useSelector } from 'react-redux';
+import { remove } from '../redux/Slices/CartSlice';
+const CartItem = ({item}) => {
+ 
+  const dispatch=useDispatch();
+  const removetocart=()=>{
+      dispatch(remove(item.id)) ;
+      toast.success("item is removed from cart") 
   }
-
+  const description=item.description;
+  
+const desc=`${description.substring(0,100)}...`;
+const title=item.title;
+  const tit=`${title.substring(0,30)}...`;
+  
   return (
-    <div className="flex flex-col w-[450px] mt-6  justify-center items-center gap-16 h-[180px] rounded-[30px] shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] ">
-      <div className=" flex gap-8 mt-8 h-[200px] w-[400px]  ">
-        <div className="">
-          <img src={item.image} className=" mt-4 h-[120px]" alt="" />
-        </div>
-        <div className="h-[180px] ">
-          <h1 className="text-gray-700 font-semibold text-lg text-left truncate w-40 mt-1">
-            {item.title}
-          </h1>
-          <h1 className="w-40 text-gray-500 font-normal text-[12px] text-left">
-            {item.description.split(" ").slice(0, 10).join(" ") + "..."}
-          </h1>
-          <div className="flex justify-between mt-4">
-            <p className="text-green-600 font-semibold">${item.price}</p>
-            <div onClick={removeFromCart}>
-              <FcDeleteDatabase />
-            </div>
-          </div>
-        </div>
-          
+    <div className='flex flex-row w-[90%]  gap-6 items-center rounded-md  mb-3 justify-end pl-3' >
+     <div>
+      <img src={item.image} alt="card image" className='w-[280px] h-[180px] object-contain'></img>
+     </div>
+     <div className=' flex flex-col
+     gap-3 '>
+      <p className='font-bold text-lg'>{tit}</p>
+      <p className='text-gray-500'>{desc}</p>
+      <div className='flex items-center justify-between w-[full] '> <p className='text-green-600'>💲{item.price}</p>
+      <button onClick={removetocart} >
+      <MdAutoDelete fontSize="20px" />
+      </button>
       </div>
+     
+      
+      <div className='w-[full] bg-gray-500 h-[2px] mt-9'>
+      </div>
+     
+      </div>
+ 
     
      
+     
     </div>
-  );
-};
+  )
+}
 
-export default CartItem;
+export default CartItem

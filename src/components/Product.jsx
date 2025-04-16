@@ -1,65 +1,51 @@
-import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import {add ,remove} from "../redux/Slices/CartSlice";
-
-const Product = ({post}) => {
-
-  const {cart} = useSelector((state) => state);
-  const dispatch = useDispatch();
-
-  const addToCart = () => {
-    dispatch(add(post));
-    toast.success("Item added to Cart");
+import React, { useState } from 'react'
+import { useDispatch, useSelector, } from 'react-redux'
+import{add,remove} from "../redux/Slices/CartSlice"
+import toast from 'react-hot-toast'
+const Product = ({item}) => {
+  
+  const description=item.description;
+  
+const desc=`${description.substring(0,70)}...`;
+  const {cart}=useSelector((state)=>(
+    state)
+  );
+  const dispatch=useDispatch();
+  const removetocart=()=>{
+      dispatch(remove(item.id)) ;
+      toast.error("item is removed") 
   }
-
-  const removeFromCart = () => {
-    dispatch(remove(post.id));
-    toast.error("Item removed from Cart");
+  const addtocart=()=>{
+    dispatch(add(item));
+    toast.success("item is added to cart")
+   
   }
-
+  const title=item.title;
+  const tit=`${title.substring(0,20)}...`
   return (
-    <div className="flex flex-col items-center justify-between 
-    hover:scale-110 transition duration-400 ease-in  gap-3 p-4 mt-10
-    ml-5 rounded-[30px] shadow-2xl">
-      <div>
-        <p className="text-gray-700 font-semibold text-lg text-left truncate w-40 mt-1">{post.title}</p>
-      </div>
-      <div>
-        <p className="w-40 text-gray-400 font-normal text-[10px] text-left">{post.description.split(" ").slice(0,10).join(" ") + "..."}</p>
-      </div>
-      <div className="h-[180px]">
-        <img src={post.image} className="h-full w-full " alt=""/>
-      </div>
+    <div className='flex flex-col justify-between items-center gap-2 mx-3 mt-1'>
+      <h2 className='font-bold text-lg'>
+        {tit}
+      </h2>
+      <p className='text-gray-500'>
+            {desc}
+        </p>
+      <img src={item.image} alt="image" className='w-[150px] h-[180px]  object-contain'>
+      </img>
+      <div className='flex justify-between items-center   gap-6 w-full mt-2 '>
+      <p className='text-green-500 text-md'><span>$</span>
+        {item.price}</p>
+    <div className='border py-2 px-5 rounded-full bg-gray-300 hover:bg-slate-600 transition-all 1s ease-in hover:text-white border-black '>
+      {
+        cart.some((p)=>p.id===item.id)?(<button onClick={removetocart} >Remove Item</button>):(<button onClick={addtocart}>Add to Cart</button>)
+      }
+    </div>
+    </div>
 
-      <div className="flex justify-between gap-12 items-center w-full mt-5">
-        <div>
-          <p className="text-green-600 font-semibold">${post.price}</p>
-        </div>
-        
-        {
-          cart.some((p) => p.id === post.id) ?
-          (<button
-          className="text-gray-700 border-2 border-gray-700 rounded-full font-semibold 
-          text-[12px] p-1 px-3 uppercase 
-          hover:bg-gray-700
-          hover:text-white transition duration-300 ease-in"
-          onClick={removeFromCart}>
-            Remove Item
-          </button>) :
-          (<button
-          className="text-gray-700 border-2 border-gray-700 rounded-full font-semibold 
-          text-[12px] p-1 px-3 uppercase 
-          hover:bg-gray-700
-          hover:text-white transition duration-300 ease-in"
-          onClick={addToCart}>
-            Add to Cart
-          </button>)
-        }
-      </div>
-     
 
     </div>
-  );
-};
+  )
+}
 
-export default Product;
+export default Product
+
